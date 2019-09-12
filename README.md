@@ -1,80 +1,50 @@
 # logparser implementations
 
-Time and memory as reported by `time -l`.
+Trying some different logparser implementations.
 
-| impl        | time   | mem     |
-|-------------|--------|---------|
-| naive list  | 10.92s | 775 Mb  |
-| counter     | 14.68s | 817 Mb  |
-| dataclass   | 14.42s | 1033 Mb |
-| accumulator | 13.03s | 1031 Mb |
+## benchmark
 
-## Log
+```
+master$ time bash test.sh
+PARSER                 #USERS #ENDPOINTS  TIME   MEM
+parser.py              100    10          10.74  701382656
+parser_counter.py      100    10          12.83  7069696
+parser_dataclass.py    100    10          12.45  7942144
+parser_accumulator.py  100    10          12.38  7045120
+parser.py              100    100         11.30  688578560
+parser_counter.py      100    100         12.28  8712192
+parser_dataclass.py    100    100         11.35  9318400
+parser_accumulator.py  100    100         11.40  8470528
+parser.py              100    1000        11.32  719732736
+parser_counter.py      100    1000        11.79  20123648
+parser_dataclass.py    100    1000        13.60  23072768
+parser_accumulator.py  100    1000        13.59  22953984
+parser.py              1000   10          11.55  760074240
+parser_counter.py      1000   10          12.19  8409088
+parser_dataclass.py    1000   10          12.16  8863744
+parser_accumulator.py  1000   10          11.68  7979008
+parser.py              1000   100         12.19  747118592
+parser_counter.py      1000   100         13.99  20631552
+parser_dataclass.py    1000   100         13.69  17911808
+parser_accumulator.py  1000   100         12.45  17387520
+parser.py              1000   1000        13.39  775659520
+parser_counter.py      1000   1000        18.88  134316032
+parser_dataclass.py    1000   1000        17.63  107560960
+parser_accumulator.py  1000   1000        11.66  106971136
+parser.py              10000  10          10.90  764604416
+parser_counter.py      10000  10          14.83  18501632
+parser_dataclass.py    10000  10          14.48  21209088
+parser_accumulator.py  10000  10          12.63  20340736
+parser.py              10000  100         12.92  752971776
+parser_counter.py      10000  100         14.99  107081728
+parser_dataclass.py    10000  100         14.37  131231744
+parser_accumulator.py  10000  100         13.74  130215936
+parser.py              10000  1000        13.18  782086144
+parser_counter.py      10000  1000        18.56  741048320
+parser_dataclass.py    10000  1000        18.78  981254144
+parser_accumulator.py  10000  1000        17.14  978939904
 
-```bash
-$ time python generate.py >my.log
-$ /usr/bin/time -l python parser.py <my.log >/dev/null
-       10.92 real        10.19 user         0.68 sys
- 775327744  maximum resident set size
-         0  average shared memory size
-         0  average unshared data size
-         0  average unshared stack size
-    192590  page reclaims
-         0  page faults
-         0  swaps
-         0  block input operations
-         0  block output operations
-         0  messages sent
-         0  messages received
-         0  signals received
-         0  voluntary context switches
-      6819  involuntary context switches
-$ /usr/bin/time -l python parser_counter.py <my.log >/dev/null
-       14.68 real        14.14 user         0.48 sys
- 817537024  maximum resident set size
-         0  average shared memory size
-         0  average unshared data size
-         0  average unshared stack size
-    201282  page reclaims
-         0  page faults
-         0  swaps
-         0  block input operations
-         0  block output operations
-         0  messages sent
-         0  messages received
-         0  signals received
-         0  voluntary context switches
-      7006  involuntary context switches
-$ /usr/bin/time -l python parser_dataclass.py <my.log >/dev/null
-       14.43 real        13.84 user         0.54 sys
-1033084928  maximum resident set size
-         0  average shared memory size
-         0  average unshared data size
-         0  average unshared stack size
-    252990  page reclaims
-         1  page faults
-         0  swaps
-         0  block input operations
-         0  block output operations
-         0  messages sent
-         0  messages received
-         0  signals received
-         9  voluntary context switches
-      5463  involuntary context switches
-$ /usr/bin/time -l python parser_accumulator.py <my.log >/dev/null
-       13.03 real        12.46 user         0.53 sys
-1031704576  maximum resident set size
-         0  average shared memory size
-         0  average unshared data size
-         0  average unshared stack size
-    252544  page reclaims
-         0  page faults
-         0  swaps
-         0  block input operations
-         0  block output operations
-         0  messages sent
-         0  messages received
-         0  signals received
-         2  voluntary context switches
-      5235  involuntary context switches
+real	18m30.216s
+user	17m19.656s
+sys	0m30.117s
 ```

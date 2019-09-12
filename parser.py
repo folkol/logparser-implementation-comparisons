@@ -1,5 +1,5 @@
-from collections import defaultdict, Counter
 import sys
+from collections import defaultdict
 
 visitors = defaultdict(list)
 for line in sys.stdin:

@@ -1,5 +1,5 @@
-from collections import defaultdict
 import sys
+from collections import defaultdict
 
 visitors = defaultdict(lambda: [0, set()])
 

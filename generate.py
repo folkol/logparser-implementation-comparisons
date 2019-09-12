@@ -1,18 +1,20 @@
+import argparse
 from datetime import datetime, timedelta
-from string import ascii_lowercase
-from itertools import permutations
+from itertools import permutations, islice
 from random import choice, randint
+from string import ascii_lowercase
 
-NUM_REQUESTS = 10_000_000
-NUM_USERS = 1000
+arg_parser = argparse.ArgumentParser(description='Generates fake access logs')
+arg_parser.add_argument('--num-requests', type=int, default=10_000_000)
+arg_parser.add_argument('--num-users', type=int, default=1000)
+arg_parser.add_argument('--num-endpoints', type=int, default=100)
+args = arg_parser.parse_args()
 
-endpoints = ['/' + ''.join(p) for p in permutations(ascii_lowercase, r=3)]
-uids = list(range(NUM_USERS))
+endpoints = ['/' + ''.join(letters) for letters in islice(permutations(ascii_lowercase), args.num_endpoints)]
+uids = list(range(args.num_users))
 
 t = datetime(2000, 1, 1)
 
-for _ in range(NUM_REQUESTS):
+for _ in range(args.num_requests):
     t = t + timedelta(0, randint(0, 1))
-    endpoint = choice(endpoints)
-    uid = choice(uids)
-    print(f'{t.isoformat()} {endpoint} {uid}')
+    print(f'{t.isoformat()} {choice(endpoints)} {choice(uids)}')

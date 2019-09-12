@@ -1,5 +1,5 @@
-from collections import defaultdict
 import sys
+from collections import defaultdict
 from dataclasses import make_dataclass
 
 Visitors = make_dataclass('Visitors', [('total', int), ('unique', set)])
